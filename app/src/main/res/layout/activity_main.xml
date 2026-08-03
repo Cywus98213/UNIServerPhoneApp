@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FAFAFA"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Server Status -->
+    <TextView
+        android:id="@+id/statusView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Server status: Idle"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="#455A64"
+        android:padding="12dp"
+        android:gravity="center"/>
+
+    <!-- Server Control Buttons -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="12dp">
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Server"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Close Server"/>
+    </LinearLayout>
+
+    <!-- Audio Control -->
+    <Button
+        android:id="@+id/playAudioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Play Audio"
+        android:layout_marginTop="12dp"/>
+
+    <!-- Pi Image Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Image from Pi"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#212121"
+        android:layout_marginTop="16dp"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitCenter"
+        android:background="#E0E0E0"
+        android:contentDescription="Pi Image"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Message Input Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Message to Glasses"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#212121"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/messageInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter message here"
+        android:padding="12dp"
+        android:background="#FFFFFF"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/sendTextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Message"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Debug Log Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Debug Log"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#212121"
+        android:layout_marginTop="16dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#F5F5F5"
+        android:padding="8dp"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/debugLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(Debug output will appear here)"
+            android:textSize="14sp"
+            android:textColor="#444444"/>
+    </ScrollView>
+</LinearLayout>
