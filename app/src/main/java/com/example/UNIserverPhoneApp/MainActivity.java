@@ -10,8 +10,6 @@ import android.graphics.BitmapFactory;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,8 +24,12 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Enumeration;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,20 +62,51 @@ public class MainActivity extends AppCompatActivity {
         setupButtonListeners();
     }
 
-    public void getDeviceInfo(){
+    public void getDeviceInfo() {
         try {
-            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-            DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
-            int ip = dhcpInfo.gateway; // gateway = hotspot IP
-            String ipString = String.format("%d.%d.%d.%d",
-                    (ip & 0xff),
-                    (ip >> 8 & 0xff),
-                    (ip >> 16 & 0xff),
-                    (ip >> 24 & 0xff));
-            addDebugLog("Hotspot Gateway IP: " + ipString);
+            String hotspotIp = getHotspotIpAddress();
+            if (hotspotIp != null) {
+                addDebugLog("Phone hotspot IP: " + hotspotIp);
+                addDebugLog("Glasses should connect to this IP on port 8888");
+            } else {
+                addDebugLog("Hotspot IP not found — turn on mobile hotspot, then Start Server again");
+            }
         } catch (Exception e) {
             addDebugLog("Error getting hotspot IP: " + e.getMessage());
         }
+    }
+
+    private String getHotspotIpAddress() throws Exception {
+        String fallback = null;
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = interfaces.nextElement();
+            if (!networkInterface.isUp() || networkInterface.isLoopback()) {
+                continue;
+            }
+
+            String name = networkInterface.getName().toLowerCase();
+            boolean likelyHotspot = name.startsWith("ap")
+                    || name.startsWith("swlan")
+                    || name.contains("softap");
+
+            Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+            while (addresses.hasMoreElements()) {
+                InetAddress address = addresses.nextElement();
+                if (!(address instanceof Inet4Address) || address.isLoopbackAddress()) {
+                    continue;
+                }
+
+                String ip = address.getHostAddress();
+                if (likelyHotspot) {
+                    return ip;
+                }
+                if (ip.startsWith("192.168.")) {
+                    fallback = ip;
+                }
+            }
+        }
+        return fallback;
     }
 
 
